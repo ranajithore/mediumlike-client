@@ -1,0 +1,65 @@
+<div class="card my-3">
+  <div class="card-body pt-0">
+    <p class="h5 text-center my-3">Comments</p>
+    <!-- Comment -->
+    <div
+      *ngFor="let comment of comments | async"
+      class="d-flex flex-column my-3"
+    >
+      <p class="h6 p-0 m-0">
+        {{
+          comment.author.firstName +
+            " " +
+            (comment.author.lastName !== "null" ? comment.author.lastName : "")
+        }}
+      </p>
+      <p class="p-0 m-0">{{ comment.body }}</p>
+      <div>
+        <a
+          *ngIf="!comment.hasLiked"
+          href="#"
+          class="text-decoration-none"
+          (click)="onClickLikeBtn($event, comment)"
+          >Like</a
+        >
+        <a
+          *ngIf="comment.hasLiked"
+          href="#"
+          class="text-decoration-none"
+          style="font-weight: bold"
+          (click)="onClickLikeBtn($event, comment)"
+          >Liked</a
+        >
+        <a href="#" class="mx-3 text-decoration-none">Reply</a>
+        <small class="text-body-secondary"
+          >{{ comment.createdAt | date }} • {{ comment.likes.length }} likes
+        </small>
+      </div>
+    </div>
+
+    <div *ngIf="!(comments | async)?.length">No coments yet to show.</div>
+
+    <form class="row" [formGroup]="commentForm">
+      <div class="col-12 col-lg-10 my-2">
+        <div class="form-group">
+          <input
+            type="text"
+            class="form-control"
+            formControlName="body"
+            placeholder="Type your comment here"
+          />
+        </div>
+      </div>
+      <div class="col-12 col-lg-2 my-2">
+        <button
+          type="submit"
+          class="btn btn-dark w-100"
+          [disabled]="commentForm.invalid"
+          (click)="onComment($event)"
+        >
+          Comment
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

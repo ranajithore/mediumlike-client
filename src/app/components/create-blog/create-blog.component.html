@@ -1,0 +1,110 @@
+<div class="row create-blog-form justify-content-center">
+  <div class="col col-lg-9">
+    <form [formGroup]="createBlogForm">
+      <div class="d-flex align-items-center mt-3">
+        <label for="sortBy" class="width-max-content h6 mt-1">Category</label>
+        <select
+          class="form-select form-select-sm width-fit-content mx-2"
+          aria-label=".form-select-sm example"
+          name="sortBy"
+          formControlName="category"
+          (change)="onFormDataChange($event)"
+        >
+          <option value="">None</option>
+          <option
+            *ngFor="let category of categories | async"
+            [value]="category._id"
+          >
+            {{ category.name }}
+          </option>
+        </select>
+        <div class="invalid-feedback">Pick a category for your blog</div>
+      </div>
+
+      <div>
+        <p class="h6 mt-3">Blog Title</p>
+        <textarea
+          class="form-control mb-3"
+          aria-label="With textarea"
+          placeholder="Pick a title for your blog"
+          formControlName="title"
+          (change)="onFormDataChange($event)"
+        ></textarea>
+        <div class="invalid-feedback">
+          Blog Title should contain minimum 10 characters and maximum 100
+          characters
+        </div>
+      </div>
+
+      <div>
+        <p class="h6 mt-3">Blog Subtitle</p>
+        <textarea
+          class="form-control mb-3"
+          aria-label="With textarea"
+          placeholder="Pick a subtitle for your blog"
+          formControlName="subTitle"
+          (change)="onFormDataChange($event)"
+        ></textarea>
+        <div class="invalid-feedback">
+          Blog Subtitle should contain minimum 20 characters and maximum 200
+          characters
+        </div>
+      </div>
+
+      <!-- <div class="my-3">
+        <label class="form-label h6" for="customFile"
+          >Pick a Featured Photo</label
+        >
+        <input
+          type="file"
+          class="form-control"
+          id="customFile"
+          formControlName="featuredPhoto"
+          (change)="onFormDataChange($event)"
+        />
+
+        <div class="invalid-feedback">Choose a feature photo for your blog</div>
+      </div> -->
+
+      <div>
+        <p class="h6 mt-3">Main Content</p>
+        <angular-editor
+          placeholder="Write your blog's main content here"
+          [config]="editorConfig"
+          formControlName="body"
+          (change)="onFormDataChange($event)"
+        ></angular-editor>
+        <div class="invalid-feedback">
+          Blog main content should contain minimum 100 characters and maximum
+          2000 characters
+        </div>
+      </div>
+
+      <div class="form-check form-switch my-3">
+        <label
+          class="switch-label form-check-label h6 mx-2"
+          for="flexSwitchCheckDefault"
+          >Make this blog Premium</label
+        >
+        <input
+          class="form-check-input switch-btn"
+          type="checkbox"
+          role="switch"
+          id="flexSwitchCheckDefault"
+          formControlName="isPremium"
+          (change)="onFormDataChange($event)"
+        />
+      </div>
+    </form>
+    <div class="d-flex justify-content-center align-items-center my-3">
+      <button
+        type="submit"
+        class="btn btn-dark mx-3 w-25"
+        (click)="onSave($event)"
+        [disabled]="createBlogForm.invalid"
+      >
+        Save
+      </button>
+    </div>
+  </div>
+</div>

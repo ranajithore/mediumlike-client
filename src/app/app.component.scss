@@ -1,0 +1,9 @@
+:host ::ng-deep mat-progress-bar {
+  margin-top: -3px;
+  height: 10px;
+  color: #ffc107;
+}
+
+:host ::ng-deep mat-progress-bar .mdc-linear-progress__bar-inner {
+  border-top-width: 10px;
+}

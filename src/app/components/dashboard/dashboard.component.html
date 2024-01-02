@@ -1,0 +1,304 @@
+<div class="row dashboard-form justify-content-center">
+  <!-- Main Section -->
+  <div class="col-12 col-lg-9 pt-3 mb-3">
+    <!-- Search Bar -->
+    <div class="row">
+      <div class="col-10 m-auto">
+        <form class="d-flex" role="search">
+          <input
+            class="form-control me-2"
+            type="search"
+            placeholder="Search"
+            aria-label="Search"
+            name="searchQuery"
+            list="autocompleteList"
+            [(ngModel)]="searchQuery"
+            (keyup)="onSearchQueryChange($event)"
+            (blur)="onSearchQueryChange($event)"
+          />
+          <datalist id="autocompleteList">
+            <option
+              *ngFor="let blog of autocompleteSuggestions | async"
+              [value]="blog.title"
+            ></option>
+          </datalist>
+          <button
+            class="btn btn-dark"
+            type="submit"
+            (click)="onClickSearchBtn()"
+          >
+            Search
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Filter Section -->
+    <div class="row" *ngIf="!(isSearching | async)">
+      <div class="col d-flex overflow-auto">
+        <div class="d-flex justify-content-center align-items-center">
+          <label for="sortBy" class="width-max-content">Sort By</label>
+          <select
+            class="form-select form-select-sm width-fit-content mx-2"
+            aria-label=".form-select-sm example"
+            name="sortBy"
+            (change)="onSortByChange($event)"
+          >
+            <option value="none">None</option>
+            <option value="publishedAt">Publishing Date</option>
+            <option value="views">Views</option>
+            <option value="approxReadTime">Reading Time</option>
+          </select>
+          <button
+            type="button"
+            class="btn btn-xs btn-outline"
+            (click)="onSortingOrderChange()"
+          >
+            <i *ngIf="(sortingOrder | async) === 1" class="bi bi-sort-up"></i>
+            <i
+              *ngIf="(sortingOrder | async) === -1"
+              class="bi bi-sort-down"
+            ></i>
+          </button>
+        </div>
+        <div class="vr h-50 my-auto mx-2"></div>
+        <div
+          class="d-flex justify-content-center align-items-center width-fit-content"
+        >
+          <div class="form-check form-switch my-3">
+            <label
+              class="switch-label form-check-label mx-2 width-max-content"
+              for="flexSwitchCheckDefault"
+              >Premium Blogs</label
+            >
+            <input
+              class="form-check-input switch-btn"
+              type="checkbox"
+              role="switch"
+              id="flexSwitchCheckDefault"
+              (click)="onClickPremiumBlogs($event)"
+            />
+          </div>
+        </div>
+        <div class="vr h-50 my-auto mx-2"></div>
+        <div
+          class="d-flex justify-content-center align-items-center width-fit-content"
+        >
+          <label for="category" class="width-max-content">Category</label>
+          <select
+            class="form-select form-select-sm width-fit-content mx-2"
+            aria-label=".form-select-sm example"
+            name="category"
+            (change)="onCategoryChange($event)"
+          >
+            <option selected>All</option>
+            <option
+              *ngFor="let category of categories | async"
+              [value]="category._id"
+            >
+              {{ category.name }}
+            </option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div
+      *ngIf="(isSearching | async) && !(isShowingSearchResults | async)"
+      style="height: 56px"
+    ></div>
+    <div
+      *ngIf="isShowingSearchResults | async"
+      style="height: 56px"
+      class="d-flex justify-content-center align-items-center"
+    >
+      <p class="h6 text-center">Search Results</p>
+    </div>
+    <hr class="m-0 p-0" />
+    <div class="row">
+      <p class="h6 mt-2">
+        Showing {{ (blogs | async)?.length }} of
+        {{ totalNumberOfBlogs | async }}
+        blogs
+      </p>
+
+      <!-- Article Cards -->
+      <div class="container">
+        <div class="row justify-content-space-around">
+          <!-- Article Card -->
+          <div class="col justify-content-center align-items-center">
+            <div
+              *ngFor="let blog of blogs | async; let i = index"
+              class="card my-3"
+            >
+              <div class="card-body pb-1">
+                <div class="row">
+                  <div class="col">
+                    <h5 class="card-title text-truncate">
+                      {{ blog.title }}
+                    </h5>
+                    <p
+                      *ngIf="!(viewSavedBlogs | async)"
+                      class="text-body-secondary width-fit-content text-small"
+                    >
+                      {{
+                        blog.author.firstName +
+                          " " +
+                          (blog.author.lastName !== "null"
+                            ? blog.author.lastName
+                            : "")
+                      }}
+                      • Published At {{ blog.publishedAt | date }} •
+                      {{ blog.isPaid ? "Premium" : "Free" }}
+                    </p>
+                    <p
+                      *ngIf="(viewSavedBlogs | async) && blog.lastModifiedAt"
+                      class="text-body-secondary width-fit-content text-small"
+                    >
+                      {{
+                        blog.author.firstName +
+                          " " +
+                          (blog.author.lastName !== "null"
+                            ? blog.author.lastName
+                            : "")
+                      }}
+                      • Created At {{ blog.createdAt | date }} • Last Modified
+                      At {{ blog.lastModifiedAt | date }} •
+                      {{ blog.isPaid ? "Premium" : "Free" }}
+                    </p>
+                    <p class="card-text custom-text-truncate">
+                      {{ blog.subTitle }}
+                    </p>
+                    <div class="read-more">
+                      <a
+                        href="#"
+                        class="read-more"
+                        (click)="clickReadMore($event, i)"
+                        >Read More</a
+                      >
+                    </div>
+                    <div class="d-flex justify-content-space-between">
+                      <p
+                        *ngIf="!(viewSavedBlogs | async)"
+                        class="text-body-secondary width-fit-content text-small"
+                      >
+                        {{ blog.likes.length + " likes" }} •
+                        {{ blog.views.length + " views" }}
+                      </p>
+                      <p
+                        *ngIf="blog.approxReadTimeText"
+                        class="text-body-secondary width-fit-content text-small"
+                      >
+                        {{ blog.approxReadTimeText }}
+                      </p>
+                      <p
+                        *ngIf="!blog.approxReadTimeText"
+                        class="text-body-secondary width-fit-content text-small"
+                      >
+                        {{ blog.approxReadTime }} min read
+                      </p>
+                    </div>
+
+                    <!-- Buttons Section -->
+                    <div
+                      *ngIf="!(viewSavedBlogs | async)"
+                      class="row"
+                      style="margin-top: -20px"
+                    >
+                      <div class="col-4 col-lg-2">
+                        <div class="d-flex w-100">
+                          <button
+                            *ngIf="!blog.hasLiked"
+                            mat-icon-button
+                            (click)="onClickLikeBtn(blog)"
+                            color="warn"
+                          >
+                            <mat-icon>favorite_border</mat-icon>
+                          </button>
+                          <button
+                            *ngIf="blog.hasLiked"
+                            mat-icon-button
+                            (click)="onClickLikeBtn(blog)"
+                            color="warn"
+                          >
+                            <mat-icon>favorite</mat-icon>
+                          </button>
+                          <button
+                            mat-icon-button
+                            (click)="onClickCommentsBtn(blog)"
+                          >
+                            <mat-icon>comment</mat-icon>
+                          </button>
+                          <button mat-icon-button>
+                            <mat-icon>share</mat-icon>
+                          </button>
+                        </div>
+                      </div>
+                      <div class="col d-flex justify-content-end">
+                        <button
+                          mat-icon-button
+                          *ngIf="!blog.hasBookmarked"
+                          (click)="onClickBookmarkBtn(blog)"
+                        >
+                          <mat-icon>bookmark_border</mat-icon>
+                        </button>
+                        <button
+                          mat-icon-button
+                          *ngIf="blog.hasBookmarked"
+                          (click)="onClickBookmarkBtn(blog)"
+                        >
+                          <mat-icon>bookmark</mat-icon>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Saved Blogs Controls -->
+                  <div
+                    *ngIf="viewSavedBlogs | async"
+                    class="col-12 col-lg-2 justify-content-center align-items-center h-100"
+                  >
+                    <button
+                      class="btn btn-dark w-100 my-2"
+                      (click)="onClickEditBtn(blog)"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      class="btn btn-danger w-100 my-2"
+                      (click)="onClickDeleteBtn(blog._id)"
+                    >
+                      Delete
+                    </button>
+                    <button
+                      class="btn btn-warning w-100 my-2"
+                      (click)="onClickPublishBtn(blog)"
+                    >
+                      Publish
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Show More -->
+            <div *ngIf="displayShowMoreBtn | async" class="d-flex w-100">
+              <button
+                class="btn btn-outline-dark btn-sm mx-auto my-3"
+                type="button"
+                (click)="onClickShowMore()"
+              >
+                <span
+                  *ngIf="isLoading | async"
+                  class="spinner-border spinner-border-sm"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
+                Show More
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

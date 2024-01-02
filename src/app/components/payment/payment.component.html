@@ -1,0 +1,51 @@
+<div class="row payment-form">
+  <div class="col">
+    <div class="row h-100 justify-content-center align-items-center">
+      <div class="col-9 col-lg-4">
+        <img class="m-auto" src="assets/images/payment.svg" alt="Sign In Art" />
+      </div>
+      <div class="col-12 col-lg-6">
+        <form *ngIf="true" class="px-3 w-100" [formGroup]="paymentForm">
+          <h1 class="text-center mb-3">Choose a plan</h1>
+
+          <div
+            *ngFor="let plan of subscriptionPlans | async; let i = index"
+            class="form-check d-flex align-items-center my-3 p-0"
+          >
+            <input
+              class="form-check-input mx-3"
+              type="radio"
+              [id]="plan._id"
+              [value]="plan._id"
+              formControlName="selectedPlan"
+            />
+            <label class="form-check-label w-100" [htmlFor]="plan._id">
+              <div class="card w-100">
+                <div class="card-body">
+                  <h5 class="card-title">{{ plan.type }}</h5>
+                  <h6 class="card-subtitle mb-2 text-body-secondary">
+                    {{ plan.title }}
+                  </h6>
+                  <p class="card-text">
+                    {{ plan.description }}
+                  </p>
+                </div>
+              </div>
+            </label>
+          </div>
+
+          <div class="d-flex justify-content-center align-items-center w-100">
+            <button
+              type="submit"
+              class="btn btn-dark my-3 w-50"
+              [disabled]="paymentForm.invalid"
+              (click)="onClickPayBtn($event)"
+            >
+              Pay
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

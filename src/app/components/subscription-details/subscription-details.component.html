@@ -1,0 +1,72 @@
+<div class="row subscription-details-form">
+  <div class="col">
+    <div class="row h-100 justify-content-center align-items-center">
+      <div class="col-9 col-lg-4">
+        <img class="m-auto" src="assets/images/payment.svg" alt="Sign In Art" />
+      </div>
+      <div class="col-12 col-lg-6">
+        <form *ngIf="true" class="px-3 w-100" [formGroup]="subscriptionForm">
+          <h1 *ngIf="hasActiveSubscription | async" class="text-center mb-3">
+            Active plan
+          </h1>
+
+          <h1 *ngIf="!(hasActiveSubscription | async)" class="text-center mb-3">
+            No active subscription
+          </h1>
+
+          <h6 *ngIf="!(hasActiveSubscription | async)" class="text-center mb-3">
+            You don't have any active subscription. Please buy a subscription
+            plan to enjoy all benifits.
+          </h6>
+
+          <div *ngIf="hasActiveSubscription | async">
+            <div
+              *ngFor="let plan of subscriptionPlans | async; let i = index"
+              class="form-check d-flex align-items-center my-3 p-0"
+            >
+              <input
+                class="form-check-input mx-3"
+                type="radio"
+                [id]="plan._id"
+                [value]="plan._id"
+                formControlName="selectedPlan"
+              />
+              <label class="form-check-label w-100" [htmlFor]="plan._id">
+                <div class="card w-100">
+                  <div class="card-body">
+                    <h5 class="card-title">{{ plan.type }}</h5>
+                    <h6 class="card-subtitle mb-2 text-body-secondary">
+                      {{ plan.title }}
+                    </h6>
+                    <p class="card-text">
+                      {{ plan.description }}
+                    </p>
+
+                    <p class="card-text">
+                      Subscription Start date:
+                      {{ currentLoggedInUser.subscriptionStartDate | date }}
+                      &nbsp; &nbsp; Subscription End date:
+                      {{ currentLoggedInUser.subscriptionEndDate | date }}
+                    </p>
+                  </div>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <div
+            *ngIf="!(hasActiveSubscription | async)"
+            class="d-flex justify-content-center align-items-center w-100"
+          >
+            <button
+              class="btn btn-dark my-3 w-50"
+              (click)="onClickBuyAPlanBtn()"
+            >
+              Buy a plan
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

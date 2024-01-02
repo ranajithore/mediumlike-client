@@ -1,0 +1,73 @@
+<div class="row sign-in-form">
+  <div class="col">
+    <div class="row h-100 justify-content-center align-items-center">
+      <div class="col-9 col-lg-4">
+        <img class="m-auto" src="assets/images/signin.svg" alt="Sign In Art" />
+      </div>
+      <div class="col-12 col-lg-4">
+        <form *ngIf="true" class="px-3 w-100" [formGroup]="signInForm">
+          <h1 class="text-center mb-3">Sign In</h1>
+          <div>
+            <input
+              type="email"
+              class="form-control my-2"
+              placeholder="Email"
+              formControlName="email"
+              (change)="onFormDataChange($event)"
+            />
+            <div class="invalid-feedback">Invalid email</div>
+          </div>
+          <div>
+            <input
+              type="password"
+              class="form-control my-2"
+              placeholder="Password"
+              formControlName="password"
+              (change)="onFormDataChange($event)"
+            />
+            <p>Forgot Password? <a href="auth/forgotpassword">Click Here</a></p>
+          </div>
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              value=""
+              id="savePasswordCheck"
+              formControlName="rememberMe"
+              (change)="onFormDataChange($event)"
+            />
+            <label class="form-check-label" for="savePasswordCheck">
+              Remember Me
+            </label>
+          </div>
+          <button
+            type="submit"
+            class="btn btn-dark my-3 w-100"
+            (click)="onSignIn($event)"
+            [disabled]="signInForm.invalid"
+          >
+            Sign In
+          </button>
+
+          <hr />
+
+          <div class="d-flex justify-content-center">
+            <div>Sign In with:</div>
+            <div class="mx-1">
+              <img
+                class="sso-icon"
+                src="assets/images/google.png"
+                (click)="socialSignIn()"
+              />
+              <!-- <img class="sso-icon mx-1" src="assets/images/facebook.png" /> -->
+            </div>
+          </div>
+
+          <hr />
+
+          <p>Don't have an account? <a href="auth/signup">Sign Up</a></p>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

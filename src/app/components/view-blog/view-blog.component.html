@@ -1,0 +1,134 @@
+<div class="row view-blog-form justify-content-center">
+  <!-- Main Section -->
+  <div class="col-12 col-lg-9 pt-3">
+    <div class="row pt-3">
+      <!-- Article Cards -->
+      <div class="container">
+        <div class="row justify-content-space-around">
+          <!-- Article Card -->
+          <div class="col justify-content-center align-items-center">
+            <div
+              *ngFor="let blog of blogs | async; let i = index"
+              class="card my-3"
+            >
+              <div class="card-body">
+                <!-- Title -->
+                <h5 class="card-title text-truncate">
+                  {{ blog.title }}
+                </h5>
+                <p
+                  *ngIf="!blog.publishedAt"
+                  class="text-body-secondary width-fit-content text-small"
+                >
+                  {{
+                    blog.author.firstName +
+                      " " +
+                      (blog.author.lastName !== "null"
+                        ? blog.author.lastName
+                        : "")
+                  }}
+                  • Created At {{ blog.createdAt | date }} • Last Modified At
+                  {{ blog.lastModifiedAt | date }} •
+                  {{ blog.category.name }}
+                </p>
+                <p
+                  *ngIf="blog.publishedAt"
+                  class="text-body-secondary width-fit-content text-small"
+                >
+                  {{
+                    blog.author.firstName +
+                      " " +
+                      (blog.author.lastName !== "null"
+                        ? blog.author.lastName
+                        : "")
+                  }}
+                  • Published At {{ blog.publishedAt | date }} •
+                  {{ blog.category.name }}
+                </p>
+                <!-- Sub Title -->
+                <p class="card-text custom-text-truncate">
+                  {{ blog.subTitle }}
+                </p>
+                <div class="d-flex justify-content-space-between">
+                  <p class="text-body-secondary width-fit-content text-small">
+                    {{ blog.likes.length }} likes •
+                    {{ blog.views.length + " views" }}
+                  </p>
+                  <p class="text-body-secondary width-fit-content text-small">
+                    {{ blog.approxReadTimeText }}
+                  </p>
+                </div>
+
+                <hr />
+
+                <!-- Buttons Section -->
+                <div class="row" style="margin-top: -20px">
+                  <div class="col-4 col-lg-2">
+                    <div class="d-flex w-100">
+                      <button
+                        *ngIf="!blog.hasLiked"
+                        mat-icon-button
+                        (click)="onClickLikeBtn(blog)"
+                        color="warn"
+                      >
+                        <mat-icon>favorite_border</mat-icon>
+                      </button>
+                      <button
+                        *ngIf="blog.hasLiked"
+                        mat-icon-button
+                        (click)="onClickLikeBtn(blog)"
+                        color="warn"
+                      >
+                        <mat-icon>favorite</mat-icon>
+                      </button>
+                      <button mat-icon-button (click)="onClickCommentsBtn()">
+                        <mat-icon>comment</mat-icon>
+                      </button>
+                      <button mat-icon-button>
+                        <mat-icon>share</mat-icon>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="col d-flex justify-content-end">
+                    <button
+                      mat-icon-button
+                      *ngIf="!blog.hasBookmarked"
+                      (click)="onClickBookmarkBtn(blog)"
+                    >
+                      <mat-icon>bookmark_border</mat-icon>
+                    </button>
+                    <button
+                      mat-icon-button
+                      *ngIf="blog.hasBookmarked"
+                      (click)="onClickBookmarkBtn(blog)"
+                    >
+                      <mat-icon>bookmark</mat-icon>
+                    </button>
+                  </div>
+                </div>
+
+                <hr class="mt-0" />
+
+                <!-- Body -->
+                <div class="row mt-2">
+                  <angular-editor
+                    placeholder="Write your blog's main content here"
+                    [config]="editorConfig"
+                    [(ngModel)]="blog.body"
+                  ></angular-editor>
+                </div>
+              </div>
+            </div>
+
+            <hr />
+
+            <!-- Comments Section -->
+            <div *ngFor="let blog of blogs | async">
+              <app-comments [blog]="blog"></app-comments>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,31 @@
+<div class="row verify-email-form justify-content-center align-items-center">
+  <div class="col">
+    <div class="row justify-content-center align-items-center">
+      <div class="col-8 col-lg-3">
+        <img
+          class="verify-email-art"
+          src="assets/images/verify-email.svg"
+          alt="Verify Email Art"
+        />
+      </div>
+    </div>
+    <div class="row">
+      <p *ngIf="!(isPasswordResetEmail | async)" class="h6 text-center">
+        Thanks for signing up. A verification link has been sent to your
+        registered email. Please verify your email to continue enjoying all
+        services.
+      </p>
+      <p *ngIf="isPasswordResetEmail | async" class="h6 text-center">
+        A password reset link has been sent to your registered email. Please
+        click on that link and reset your password.
+      </p>
+      <p *ngIf="!(isPasswordResetEmail | async)" class="text-center">
+        Please click on this <a href="dashboard">link</a> if this page does not
+        redirects automatically.
+      </p>
+      <p *ngIf="!(isPasswordResetEmail | async)" class="text-center">
+        Redirects in {{ redirectInSeconds }} seconds...
+      </p>
+    </div>
+  </div>
+</div>
