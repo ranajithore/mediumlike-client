@@ -1,4 +1,5 @@
 export const environment = {
   production: true,
-  serverURL: 'http://150.230.129.98',
+  serverURL: 'https://drab-pink-panda-tie.cyclic.app',
+  razorPayKeyId: 'rzp_test_1w40o547EW7Pk2',
 };
